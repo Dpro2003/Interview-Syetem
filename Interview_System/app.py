@@ -14,7 +14,7 @@ questions = [
 
 @app.route('/')
 def home():
-    # Start with the first question
+    
     question = questions[0]
     return render_template('interview.html', question=question, question_number=0)
 
