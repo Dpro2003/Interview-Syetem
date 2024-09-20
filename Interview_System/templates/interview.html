@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interview System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Interview System</h1>
+    
+    <div class="container">
+        
+        <!-- Video Monitoring Section -->
+        <div class="video-container">
+            <h2>Video Monitoring</h2>
+            <video id="video" autoplay muted></video>
+        </div>
+        
+        <!-- Questions Section -->
+        <div class="questions-container">
+            <h2>Question: </h2>
+            <p>{{ question }}</p>
+            
+            <!-- Speech-to-text / Answer form -->
+            <form action="/submit_answer" method="POST">
+                <input type="hidden" name="question_number" value="{{ question_number }}">
+                
+                <label for="answer">Your Answer:</label>
+                <input type="text" id="answer" name="answer" placeholder="Type your answer here" required>
+                
+                <!-- Button to trigger speech-to-text -->
+                <button type="button" id="start-recording">Record Answer</button>
+                <p id="transcription" style="margin-top: 10px;"></p>
+                
+                <!-- Submit the form -->
+                <input type="submit" value="Submit Answer">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Video display
+        const videoElement = document.getElementById('video');
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function (stream) {
+                    videoElement.srcObject = stream;
+                })
+                .catch(function (error) {
+                    console.log("Error accessing camera: ", error);
+                });
+        }
+
+        // Speech-to-Text function
+        const startRecordingButton = document.getElementById('start-recording');
+        const transcriptionElement = document.getElementById('transcription');
+        let recognition;
+
+        // Check for browser compatibility
+        if ('webkitSpeechRecognition' in window) {
+            recognition = new webkitSpeechRecognition();
+        } else if ('SpeechRecognition' in window) {
+            recognition = new SpeechRecognition();
+        } else {
+            alert('Your browser does not support Speech Recognition');
+        }
+
+        // Configure recognition
+        if (recognition) {
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+
+            // Start speech recognition when button is clicked
+            startRecordingButton.addEventListener('click', function () {
+                recognition.start();
+            });
+
+            // Capture and display the speech transcription
+            recognition.onresult = function (event) {
+                let transcript = event.results[0][0].transcript;
+                transcriptionElement.innerText = `You said: ${transcript}`;
+                document.getElementById('answer').value = transcript;  // Set the answer field with the transcribed text
+            };
+
+            recognition.onerror = function (event) {
+                alert('Speech recognition error: ' + event.error);
+            };
+        }
+    </script>
+
+</body>
+</html>
