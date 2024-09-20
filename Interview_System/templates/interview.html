@@ -11,29 +11,29 @@
     
     <div class="container">
         
-        <!-- Video Monitoring Section -->
+       
         <div class="video-container">
             <h2>Video Monitoring</h2>
             <video id="video" autoplay muted></video>
         </div>
         
-        <!-- Questions Section -->
+        
         <div class="questions-container">
             <h2>Question: </h2>
             <p>{{ question }}</p>
             
-            <!-- Speech-to-text / Answer form -->
+            
             <form action="/submit_answer" method="POST">
                 <input type="hidden" name="question_number" value="{{ question_number }}">
                 
                 <label for="answer">Your Answer:</label>
                 <input type="text" id="answer" name="answer" placeholder="Type your answer here" required>
                 
-                <!-- Button to trigger speech-to-text -->
+                
                 <button type="button" id="start-recording">Record Answer</button>
                 <p id="transcription" style="margin-top: 10px;"></p>
                 
-                <!-- Submit the form -->
+                
                 <input type="submit" value="Submit Answer">
             </form>
         </div>
