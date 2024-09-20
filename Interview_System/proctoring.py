@@ -1,10 +1,7 @@
 import cv2
 
 def check_proctoring_compliance():
-    """
-    Check if the candidate's face is detected in the video frame.
-    :return: True if a face is detected, False otherwise.
-    """
+
     face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     
     cap = cv2.VideoCapture(0)
